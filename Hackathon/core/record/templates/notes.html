@@ -1,0 +1,36 @@
+{%extends base.html%}
+{% block content %}
+<div class="notes" id="notes">
+    {% for  i ,note in enumarate(notes)  %}
+    
+        {% if  note[0].type()==dict %}
+
+            <img id={{i}} class="pic_notes" src="{{note["src"]}}"alt="{{note["name"]}}">
+        {% else note[0].type()==str %}
+            <div id="{{i}}" class="note">
+                {{note[0]}}
+            </div>
+        
+            
+        {% endif %}
+        
+    {% endfor %}
+
+</div>
+<div class="pics" id="pics">
+    {% for i,pic  in other_pics  %}
+        <img id={{i}} class="pic_notes" src="{{pic["src"]}}" alt="{{pic["name"]}}">
+        
+    {% endfor %}
+</div>
+<div class="videos" id="videos">
+    {% for i,vid  in enumerate(videos) %}
+        <iframe id="{{i}}" src="{{vid}}" frameborder="0"></iframe>
+    {% endfor %}
+</div>
+<div class="articles">
+    {% for a in articles  %}
+        <a href="{{a["src"]}}">{{a["title"]}}</a>
+    {% endfor %}
+</div>
+{% endblock content %}

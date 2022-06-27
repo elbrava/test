@@ -1,0 +1,380 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  
+  body {
+    display: flex;
+    margin: 0;
+    background-color: deeppink;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .file{
+    visibility:collapse;
+  }
+
+  audio::-webkit-media-controls-mute-button,
+  audio::-webkit-media-controls-play-button,
+  audio::-webkit-media-controls-timeline-container,
+  audio::-webkit-media-controls-current-time-display,
+  audio::-webkit-media-controls-time-remaining-display,
+  audio::-webkit-media-controls-timeline,
+  audio::-webkit-media-controls-volume-slider-container,
+  audio::-webkit-media-controls-volume-slider,
+  audio::-webkit-media-controls-seek-back-button,
+  audio::-webkit-media-controls-seek-forward-button,
+  audio::-webkit-media-controls-fullscreen-button,
+  audio::-webkit-media-controls-rewind-button,
+  audio::-webkit-media-controls-return-to-realtime-button,
+  audio::-webkit-media-controls-toggle-closed-captions-button {
+
+    font-family: sponge;
+    color: deeppink;
+
+
+  }
+
+
+
+  .controls {
+    display: flexbox;
+    font-family: sponge;
+    font-size: 490%;
+    animation-play-state: running;
+    animation: spin 7 linear infinite;
+    color: deeppink;
+    width: 400;
+    height: 400;
+    background-color: #02231c;
+    border-radius: 50%;
+    border: 3px solid #02231c;
+    margin: 7% auto;
+  }
+
+  .controls:focus,
+  .controls:hover {
+    color: #02231c;
+    background-color: deeppink;
+  }
+
+  .audio {
+    outline: none;
+    width: 100%;
+    border: #02231c 4px solid;
+    color: #02231c;
+    border-radius: 0%;
+    margin: 0;
+  }
+
+  .extra {
+    display: flexbox;
+    background-color: #02231c;
+    width: 100%;
+    margin: 0;
+  }
+
+  audio::-webkit-media-controls-panel {
+    background-color: #02231c;
+    border-radius: 0%;
+    opacity: 1;
+  }
+
+  .extra_flex {
+    color: deeppink;
+    font-size: 300%;
+    font-family: sponge;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .info {
+    width: 50%;
+    display: flexbox;
+  }
+  .sr{
+   color:brown;
+   margin:0 2%;
+   font-family:swansea;
+   width:96%;
+   display:flex;
+   flex-direction:column;
+
+  }
+  /* width */
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 1px;
+
+  }
+
+  .par{
+    margin:0 auto;
+    display:flexbox;
+    margin-bottom:1%;
+    background-color:yellow; 
+    border-radius:7px;
+
+    text-align:center;
+    margin-right: 1%;
+    margin-left: 1%;
+    border-radius: 2px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .time {
+    align-self: center;
+    text-align: center;
+    width: 50%;
+  }
+</style>
+<div class="sr" id="sr">
+</div>
+<button class="controls">RECORD</button>
+
+
+</div>
+
+<div class="extra">
+  <audio src="" class="audio_record" controls></audio>
+  <div class="extra_flex">
+    <div class="info">
+      <div class="topic_name">NAME</div>
+      <div class="date">DATE</div>
+    </div>
+    <div class="info">
+      <div class="time">Time</div>
+      <form class="form" id="form_record"  enctype="multipart/form-data" action="/record" method="post">
+        {% csrf_token %}
+
+        <input id="topic" type="hidden" name="topic">
+        
+        
+      </form>
+      <button id="save">SAVE</button>
+      
+    </div>
+
+  </div>
+</div>
+    <script>
+
+        var sr=document.getElementById("sr")
+        var my_time=1200
+        var id= window.setInterval(auto_scroll, my_time);
+        function auto_scroll() {
+            //alert("yeah")
+            // If condition to set repeat 
+            var objDiv = sr;
+            console.log(window.scrollTop)
+            
+            window.scrollTo({ left: 0, top: sr.scrollHeight, behavior: "smooth" });
+            // window.scroll({ left: 0, top: objDiv.scrollHeight+i, behavior: "smooth" });
+
+            console.log(objDiv.scrollHeight);
+            //window.clearInterval(id)
+
+            //set scrolling time start
+            //my_time = setTimeout(pageScroll, 10);
+            //set scrolling time end
+        }
+        
+
+        window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+        var recognition = new window.SpeechRecognition();
+        console.log(recognition)
+        recognition.interimResults = true;
+        //recognition.continuous=true;
+        
+        var p=document.createElement("p");
+        p.classList.add("par");
+        
+        
+
+        // This runs when the speech recognition service starts
+        recognition.onstart = function () {
+            
+            
+            console.log("We are listening. Try speaking into the microphone.");
+        };
+
+        recognition.onend = function () {
+          //var p=document.createElement("p");
+          //p.classList.add("par");  
+          // when user is done speaking
+          recognition.start()
+
+        }
+
+        // This runs when the speech recognition service returns result
+        recognition.onresult = function (event) {
+            console.log(event.result)
+            const text = Array.from(event.results)
+            .map((result) => result[0])
+            .map((result) => result.transcript)
+            .join("");
+            console.log(text)
+            var transcript = event.results[0][0].transcript;
+            p.innerHTML=text
+            sr.appendChild(p)
+            var confidence = event.results[0][0].confidence;
+            if (event.results[0].isFinal){
+              p=document.createElement("p");
+              p.classList.add("par")
+
+            }
+        };
+        
+
+        // start recognition
+
+    </script>
+<script>
+  var save=document.getElementById("save")
+  var file;
+  var begin;
+  
+  
+
+
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(function (stream) {
+        var options = {
+          audioBitsPerSecond : 128000,
+          mimeType : 'audio/ogg'
+        }
+        const mediarecorder = new MediaRecorder(stream);
+        var id = null;
+        var control_element = document.querySelector(".controls");
+
+        console.log(control_element.innerHTML);
+        var date_element = document.querySelector(".date");
+        var name_element = document.querySelector(".topic_name");
+        var time_element = document.querySelector(".time");
+        var recording = false;
+        var chunks = [];
+        console.log(recording);
+
+        control_element.onclick = function () {
+          if (recording == true) {
+            recognition.stop()
+            console.log("stopped")
+            var audio = document.querySelector(".audio_record");
+            audio.src = "";
+            mediarecorder.stop();
+            window.clearInterval(id)
+            var unit_name = prompt("What is the recording for?", "UNIT");
+            document.getElementById("topic").value=unit_name
+            console.log(unit_name);
+            name_element.innerHTML = unit_name;
+
+            date_element.innerHTML = new Date().toDateString();
+
+
+            chunks = [];
+            recording = false;
+            window.clearInterval(id);
+            control_element.style.transform = "rotate(" + 0 + "deg)";
+            control_element.innerHTML = "RECORD";
+          } 
+          else {
+            recording = true;
+            
+            var id= window.setInterval(auto_scroll, my_time);
+            mediarecorder.start();
+            recognition.start();
+            begin=new Date().getTime()
+
+            console.log("playing");
+            var i;
+            var r=0;
+            id = window.setInterval(frame, 1);
+            control_element.innerHTML = "STOP";
+            function frame() {
+              i=new Date().getTime()
+              r=r+1
+              var dif =i-begin
+              sec=dif%(60000)/1000
+              min=Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60));
+              if ( min> 0) {
+                time_element.innerHTML = min + "m";
+              } else {
+                time_element.innerHTML = Math.floor(parseInt(sec )) + "s";
+                
+              }
+              
+              control_element.style.transform = "rotate(" + r+ "deg)";
+
+            }
+            mediarecorder.onstop = function () {
+              console.log(mediarecorder.state);
+              const blob = new Blob(chunks, { type: "audio/wav; codecs=0" });
+              const audio_url = window.URL.createObjectURL(blob);
+              console.log(blob);
+              audio.src = audio_url;
+              file=new File([blob],"record.wav",{type:"audio/x-wav"})
+
+
+
+    
+              
+            };
+            var form=document.getElementById("form_record")
+            mediarecorder.ondataavailable = function (e) {
+              chunks.push(e.data);
+              
+                    };
+                  }
+                };
+              })
+              .catch(function (err) {
+                console.log("err",err);
+              });
+  } else {
+    console.log("not supported");
+  }
+</script>
+<script>
+  var fd;
+  var form=document.getElementById("form_record")
+  save.addEventListener(
+    "click",function(){
+      console.log(sr.children)
+      fd=new FormData(form)
+      if (sr.children){
+          const transcribes=Array.from(sr.children).map((n)=>n.innerHTML).join(",")
+          console.log(transcribes)
+          fd.append("transcript",transcribes)
+        }
+      
+      fd.append("file",file)
+      $.ajax({
+        type:"post",
+        url:"",
+        contentType:false,
+        processData:false,
+        mimeType:"multipart/form-data",
+
+        data:fd,
+        success:function(res){
+          alert("Success"+res)
+        },
+        error:function(err){
+          console.log("error"+err)
+        }
+
+
+      })
+      
+    }
+  ) 
+
+</script>
+{% endblock content %}

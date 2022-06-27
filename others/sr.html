@@ -1,0 +1,52 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="sr" class="sr">
+
+    </div>
+    <script>
+
+        sr=document.getElementById("sr")
+        window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+        var recognition = new window.SpeechRecognition();
+        console.log(recognition)
+        recognition.interimResults = true;
+        recognition.continuous=true;
+        
+
+        // This runs when the speech recognition service starts
+        recognition.onstart = function () {
+            console.log("We are listening. Try speaking into the microphone.");
+        };
+
+        recognition.onspeechend = function () {
+            // when user is done speaking
+            //recognition.start()
+        }
+
+        // This runs when the speech recognition service returns result
+        recognition.onresult = function (event) {
+            console.log(event.result)
+            const text = Array.from(event.results)
+            .map((result) => result[0])
+            .map((result) => result.transcript)
+            .join("");
+            console.log(text)
+            var transcript = event.results[0][0].transcript;
+            sr.innerHTML=text
+            var confidence = event.results[0][0].confidence;
+        };
+
+        // start recognition
+        recognition.start();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        background-color: deeppink;
+    }
+
+    .soma {
+        display: flexbox;
+        font-size: 510%;
+        font-family: sponge;
+    }
+
+    .bot {
+        display: flexbox;
+        font-size: 200%;
+        font-family: sponge;
+        align-self: baseline;
+    }
+
+    .logo {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        color: deeppink;
+        background-color: rebeccapurple;
+
+    }
+</style>
+<style>
+    .submit {
+        width: 30%;
+        margin: 7% auto;
+        font-family: sponge;
+    }
+
+    body {
+        display: flex;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        background-color: deeppink;
+        flex-wrap: wrap;
+    }
+
+    .form_container {
+        width: 96%;
+        margin: auto 0;
+    }
+
+    input {
+        margin-top: 3%;
+        width: 100%;
+        height: 16%;
+        color: deeppink;
+        font-size: 300%;
+        background-color: rebeccapurple;
+        border: deeppink solid 4px;
+    }
+
+    input:hover,
+    input:focus {
+        background-color: deeppink;
+        border: rebeccapurple solid 4px;
+        color: rebeccapurple;
+    }
+
+    input::placeholder {
+        opacity: 0.7;
+        text-align: center;
+        color: rosybrown;
+
+
+    }
+
+
+    .credentials {
+        color: rebeccapurple;
+        font-size: 490%;
+        font-family: sponge;
+    }
+
+    .capital {
+        text-transform: uppercase;
+    }
+</style>
+<style>
+    #flex1 {
+        display: flexbox;
+    }
+
+    #flex2 {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+    }
+
+    #inner_flex1 {
+        display: flexbox;
+        height: 10%;
+        margin: 1%;
+        font-size: 300%;
+    }
+
+    input[type="time"i],
+    #topic {
+        width: auto;
+
+    }
+
+    #add {
+        margin: 1%;
+        font-size: 140%;
+        background-color: yellow;
+    }
+</style>
+
+
+<div class="form_container">
+    <form action="" method="post" id="form1">
+        {% csrf_token %}
+        <div class="credentials">EDIT YOUR {{unit}} UNIT</div>
+        <div id="flex1">
+            <div id="flex2">
+                <select aria-label="type" name="type" id="type" >
+                    <option value="Assignment">Assignment</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Lesson">Lesson</option>
+                </select>
+                <input placeholder="topic" type="text" id="topic">
+                <input placeholder="time" type="time"  name="time" id="time">
+                <select name="days of the week" id="day" id="inner_flex1">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Sartuday">Sartuday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            <div id="add">ADD</div>
+            </div>
+    </form>
+
+</div>
+
+<form id="form2" action="edit_cred" method="post" autocomplete="off">
+    {% csrf_token %}
+    <input type="hidden" id="unit" name="unit" value="{{unit}}">
+    <input class="submit" type="submit" value="SAVE">
+</form>
+
+</div>
+<script>
+
+    var today = new Date();
+    var time = document.getElementById("time")
+    time.value = today.getHours() + ":" + today.getMinutes()
+    
+    var form1 = document.getElementById("form1")
+    var form2 = document.getElementById("form2")
+    var add = document.getElementById("add")
+    var topic = document.getElementById("topic")
+    var type = document.getElementById("type")
+    var day = document.getElementById("day")
+    console.log(type);
+    var count=1
+
+    add.onclick = function () {
+        if(topic.value=="required"||topic.value==""){
+            topic.value="required"
+        }
+
+        else{
+            var x = document.createElement("input");
+            x.value = type.value + " " + topic.value + " " + day.value + " " + time.value
+            var y=document.createElement("div")
+            y.innerHTML="Delete above"
+            y.id="e"+count
+            x.id="e"+count
+            x.name="details"
+            y.style.background="yellow"
+            y.onclick = function(){
+            var c = form2.children
+            for (i = 0; i < c.length; i++){
+                console.log(c[i])
+                if (c[i].id ===y.id ){
+                    form2.removeChild(c[i])
+                    form2.removeChild(y)
+                }
+                
+            }
+            
+            }
+            
+            form2.appendChild(x);
+            form2.appendChild(y)
+            topic.value = ""
+            day.value = "Monday"
+            time.value = today.getHours() + ":" + today.getMinutes();
+            count++;
+        }
+
+    }
+
+
+</script>
+
+
+{% endblock content %}

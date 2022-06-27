@@ -1,0 +1,47 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+#container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+}
+#canvas1{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+}
+#audio1{
+    width: 50%;
+    margin: 50 auto;
+    display: block;
+}
+#roller1,#roller2{
+    width: 27;
+    height: 27;
+    border-radius: 50%;
+    background-color: white;
+    display: block;
+    border: 2px solid white ;
+    position:absolute;
+    visibility: collapse;
+    color: blue;
+
+
+}
+#time1,#time2{
+    
+    width: 100;
+    height: 100;
+    background-color: transparent;
+    padding-top: 27;
+    text-align: center;
+}
